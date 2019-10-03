@@ -54,6 +54,8 @@ public class GameEngine extends SurfaceView implements Runnable {
     Bitmap lines;
 
     ArrayList<Item> items = new ArrayList<Item>();
+    int lives = 10;
+    int Score = 0;
 
 
 
@@ -205,21 +207,21 @@ public class GameEngine extends SurfaceView implements Runnable {
             // if mousedown, then move player up
             // Make the UP movement > than down movement - this will
             // make it look like the player is moving up alot
-            player.setyPosition(player.getyPosition() - 50);
-            if(player.getxPosition() <= screenHeight){
-                player.setxPosition(1500);
-                player.setyPosition(50);
+            this.player.setyPosition(this.player.getyPosition() - 200);
+            if(this.player.getyPosition() >= 850){
+                this.player.setxPosition(1500);
+                this.player.setyPosition(50);
             }
             player.updateHitbox();
         }
         if (this.fingerAction == "inputDown") {
             // if mouseup, then move player down
-            player.setyPosition(player.getyPosition() + 50);
-            if(player.getxPosition() <= screenHeight){
-                player.setyPosition(50);
-                player.setxPosition(1500);
+            this.player.setyPosition(player.getyPosition() + 200);
+            if(this.player.getyPosition() >= screenHeight){
+                this.player.setyPosition(50);
+                this.player.setxPosition(1500);
             }
-            player.updateHitbox();
+            this.player.updateHitbox();
 
 
         }
@@ -228,10 +230,59 @@ public class GameEngine extends SurfaceView implements Runnable {
         }
 
         item1.setxPosition(item1.getxPosition() + 10);
+        if(this.item1.getxPosition() >= screenWidth){
+            this.item1.setxPosition(50);
+            this.item1.setyPosition(50);
+        }
+        item1.updateHitbox();
         item2.setxPosition(item2.getxPosition() + 40);
+        if(this.item2.getxPosition() >= screenWidth){
+            this.item2.setxPosition(50);
+            this.item2.setyPosition(250);
+        }
+        item2.updateHitbox();
         item3.setxPosition(item3.getxPosition() + 5);
+        if(this.item3.getxPosition() >= screenWidth){
+            this.item3.setxPosition(50);
+            this.item3.setyPosition(450);
+        }
+        item3.updateHitbox();
         item4.setxPosition(item4.getxPosition() + 50);
-        
+        if(this.item4.getxPosition() >= screenWidth){
+            this.item4.setxPosition(50);
+            this.item4.setyPosition(650);
+        }
+        item4.updateHitbox();
+
+        if (this.item1.getHitbox().intersect(this.player.getHitbox()) == true) {
+            this.item1.setxPosition(50);
+            this.item1.setyPosition(50);
+            this.item1.updateHitbox();
+            // Increase Score
+            this.Score = this.Score + 1;
+        }
+        if (this.item2.getHitbox().intersect(this.player.getHitbox()) == true) {
+            this.item2.setxPosition(50);
+            this.item2.setyPosition(250);
+            this.item2.updateHitbox();
+            // decrease lives
+            this.lives = this.lives - 1;
+        }
+        if (this.item3.getHitbox().intersect(this.player.getHitbox()) == true) {
+            this.item3.setxPosition(50);
+            this.item3.setyPosition(450);
+            this.item3.updateHitbox();
+            // Increase Score
+            this.Score = this.Score + 1;
+        }
+        if (this.item4.getHitbox().intersect(this.player.getHitbox()) == true) {
+            this.item4.setxPosition(50);
+            this.item4.setyPosition(650);
+            this.item4.updateHitbox();
+            // Increase Score
+            this.Score = this.Score + 1;
+        }
+
 
 
 
@@ -249,6 +300,27 @@ public class GameEngine extends SurfaceView implements Runnable {
             paintbrush.setColor(Color.WHITE);
 
 
+            // DRAW THE PLAYER HITBOX
+            // ------------------------
+            // 1. change the paintbrush settings so we can see the hitbox
+            paintbrush.setColor(Color.BLUE);
+            paintbrush.setStyle(Paint.Style.STROKE);
+            paintbrush.setStrokeWidth(5);
+            paintbrush.setTextSize(60);
+            canvas.drawText("LIVES : " + this.lives,
+                    1000,
+                    50,
+                    paintbrush
+            );
+
+
+            canvas.drawText("SCORE: " + this.Score,
+                    1400,
+                    50,
+                    paintbrush
+            );
+
+
             canvas.drawBitmap(this.PlayerImage,player.getxPosition(),player.getyPosition(),null);
             canvas.drawBitmap(this.itemImage1,item1.getxPosition(),item1.getyPosition(),null);
             canvas.drawBitmap(lines,50,200,null);
@@ -261,25 +333,6 @@ public class GameEngine extends SurfaceView implements Runnable {
 
 
 
-            // DRAW THE PLAYER HITBOX
-            // ------------------------
-            // 1. change the paintbrush settings so we can see the hitbox
-            paintbrush.setColor(Color.BLUE);
-            paintbrush.setStyle(Paint.Style.STROKE);
-            paintbrush.setStrokeWidth(5);
-            paintbrush.setTextSize(60);
-            canvas.drawText("LIVES : " + " ",
-                    1000,
-                    50,
-                    paintbrush
-            );
-
-
-            canvas.drawText("SCORE: " + " ",
-                    1400,
-                    50,
-                    paintbrush
-            );
 
             //----------------
             this.holder.unlockCanvasAndPost(canvas);
