@@ -84,7 +84,11 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.player = new Player(getContext(), 1500, 50);
         this.item = new Item(getContext(), 1300, 120);
 
-        this.PlayerImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.player_ship);
+        this.PlayerImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.dino64);
+
+
+
+//        this.item1
 
         this.lines = BitmapFactory.decodeResource(getResources(),R.drawable.alien_laser);
         this.lines = Bitmap.createScaledBitmap(
@@ -151,7 +155,31 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     public void updatePositions() {
 
-        
+
+        if (this.fingerAction == "inputUp") {
+            // if mousedown, then move player up
+            // Make the UP movement > than down movement - this will
+            // make it look like the player is moving up alot
+            player.setyPosition(player.getyPosition() - 50);
+            if(player.getxPosition() <= screenHeight){
+                player.setxPosition(1500);
+                player.setyPosition(50);
+            }
+            player.updateHitbox();
+        }
+        if (this.fingerAction == "inputDown") {
+            // if mouseup, then move player down
+            player.setyPosition(player.getyPosition() + 50);
+            if(player.getxPosition() <= screenHeight){
+                player.setyPosition(50);
+                player.setxPosition(1500);
+            }
+            player.updateHitbox();
+
+
+        }
+
+
     }
 
     public void redrawSprites() {
@@ -228,9 +256,11 @@ public class GameEngine extends SurfaceView implements Runnable {
         //@TODO: What should happen when person touches the screen?
         if (userAction == MotionEvent.ACTION_DOWN) {
 
+            fingerAction = "inputUp";
         }
         else if (userAction == MotionEvent.ACTION_UP) {
 
+            fingerAction= "inputDown";
         }
 
         return true;
