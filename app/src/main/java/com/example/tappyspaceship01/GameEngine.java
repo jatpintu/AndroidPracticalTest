@@ -36,10 +36,14 @@ public class GameEngine extends SurfaceView implements Runnable {
     Canvas canvas;
     Paint paintbrush;
 
-    Item item;
-    Bitmap itemImage;
-    int itemXpos;
-    int itemYpos;
+    Item item1;
+    Item item2;
+    Item item3;
+    Item item4;
+    Bitmap itemImage1;
+    Bitmap itemImage2;
+    Bitmap itemImage3;
+    Bitmap itemImage4;
 
 
     Player player;
@@ -82,9 +86,16 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         // put the initial starting position of your player and item
         this.player = new Player(getContext(), 1500, 50);
-        this.item = new Item(getContext(), 1300, 120);
+        this.item1 = new Item(getContext(), 50, 50);
+        this.item2 = new Item(getContext(), 50, 250);
+        this.item3 = new Item(getContext(), 50, 450);
+        this.item4 = new Item(getContext(), 50, 650);
 
         this.PlayerImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.dino64);
+        this.itemImage1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.candy64);
+        this.itemImage2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.poop64);
+        this.itemImage3 = BitmapFactory.decodeResource(context.getResources(),R.drawable.rainbow64);
+        this.itemImage4 = BitmapFactory.decodeResource(context.getResources(),R.drawable.candy64);
 
 
 
@@ -194,17 +205,13 @@ public class GameEngine extends SurfaceView implements Runnable {
 
 
             canvas.drawBitmap(this.PlayerImage,player.getxPosition(),player.getyPosition(),null);
-
-
+            canvas.drawBitmap(this.itemImage1,item1.getxPosition(),item1.getyPosition(),null);
             canvas.drawBitmap(lines,50,200,null);
-
-
+            canvas.drawBitmap(this.itemImage2,item2.getxPosition(),item2.getyPosition(),null);
             canvas.drawBitmap(lines,50,400,null);
-
-
+            canvas.drawBitmap(this.itemImage3,item3.getxPosition(),item3.getyPosition(),null);
             canvas.drawBitmap(lines,50,600,null);
-
-
+            canvas.drawBitmap(this.itemImage4,item4.getxPosition(),item4.getyPosition(),null);
             canvas.drawBitmap(lines,50,800,null);
 
 
