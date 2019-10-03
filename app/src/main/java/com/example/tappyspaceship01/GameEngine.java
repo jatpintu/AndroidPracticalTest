@@ -35,7 +35,18 @@ public class GameEngine extends SurfaceView implements Runnable {
     SurfaceHolder holder;
     Canvas canvas;
     Paint paintbrush;
-    
+
+    Item item;
+    Bitmap itemImage;
+    int itemXpos;
+    int itemYpos;
+
+
+    Player player;
+    Bitmap PlayerImage;
+    int playerXpos;
+    int playerYpos;
+
 
 
 
