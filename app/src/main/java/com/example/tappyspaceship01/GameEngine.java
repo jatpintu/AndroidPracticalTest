@@ -47,6 +47,8 @@ public class GameEngine extends SurfaceView implements Runnable {
     int playerXpos;
     int playerYpos;
 
+    Bitmap lines;
+
 
 
 
@@ -77,6 +79,21 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.screenHeight = h;
 
         this.printScreenInfo();
+
+        // put the initial starting position of your player and item
+        this.player = new Player(getContext(), 100, 600);
+        this.item = new Item(getContext(), 1300, 120);
+
+        this.lines = BitmapFactory.decodeResource(getResources(),R.drawable.alien_laser);
+        this.lines = Bitmap.createScaledBitmap(
+                this.lines,
+                this.screenWidth,
+                50,
+                false);
+
+
+
+
     }
 
 
@@ -144,12 +161,39 @@ public class GameEngine extends SurfaceView implements Runnable {
             paintbrush.setColor(Color.WHITE);
 
 
+
+            canvas.drawBitmap(lines,50,200,null);
+
+
+            canvas.drawBitmap(lines,50,400,null);
+
+
+            canvas.drawBitmap(lines,50,600,null);
+
+
+            canvas.drawBitmap(lines,50,800,null);
+
+
+
             // DRAW THE PLAYER HITBOX
             // ------------------------
             // 1. change the paintbrush settings so we can see the hitbox
             paintbrush.setColor(Color.BLUE);
             paintbrush.setStyle(Paint.Style.STROKE);
             paintbrush.setStrokeWidth(5);
+            paintbrush.setTextSize(60);
+            canvas.drawText("Lives : " + " ",
+                    1000,
+                    50,
+                    paintbrush
+            );
+
+
+            canvas.drawText("SCORE: " + " ",
+                    1400,
+                    50,
+                    paintbrush
+            );
 
             //----------------
             this.holder.unlockCanvasAndPost(canvas);
