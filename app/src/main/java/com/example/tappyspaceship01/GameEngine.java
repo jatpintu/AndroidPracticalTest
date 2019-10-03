@@ -53,6 +53,8 @@ public class GameEngine extends SurfaceView implements Runnable {
 
     Bitmap lines;
 
+    ArrayList<Item> items = new ArrayList<Item>();
+
 
 
 
@@ -87,9 +89,13 @@ public class GameEngine extends SurfaceView implements Runnable {
         // put the initial starting position of your player and item
         this.player = new Player(getContext(), 1500, 50);
         this.item1 = new Item(getContext(), 50, 50);
+        this.items.add(item1);
         this.item2 = new Item(getContext(), 50, 250);
+        this.items.add(item2);
         this.item3 = new Item(getContext(), 50, 450);
+        this.items.add(item3);
         this.item4 = new Item(getContext(), 50, 650);
+        this.items.add(item4);
 
         this.PlayerImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.dino64);
         this.itemImage1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.candy64);
@@ -158,6 +164,34 @@ public class GameEngine extends SurfaceView implements Runnable {
         gameThread.start();
     }
 
+    public void spawnBullet() {
+
+
+
+    }
+
+
+    private void spawnObjects() {
+        Random random = new Random();
+
+        if (this.items.size() < 4) {
+            Item myItem;
+            if (this.items.isEmpty()) {
+                myItem = new Item(getContext(), 100, 600);
+            } else {
+                // prev bullet
+                Item prevItem = this.items.get(this.items.size() - 1);
+                int newItemXpos = prevItem.getxPosition() + 120;
+                myItem = new Item(getContext(), newItemXpos, 600);
+            }
+            this.items.add(myItem);
+        }
+
+        //@TODO: Place the enemies in a random location
+
+    }
+
+    int numLoops = 0;
 
     // ------------------------------
     // GAME ENGINE FUNCTIONS
@@ -189,9 +223,20 @@ public class GameEngine extends SurfaceView implements Runnable {
 
 
         }
+        if (numLoops % 5  == 0) {
+            spawnObjects();
+        }
+
+        item1.setxPosition(item1.getxPosition() + 10);
+        item2.setxPosition(item2.getxPosition() + 40);
+        item3.setxPosition(item3.getxPosition() + 5);
+        item4.setxPosition(item4.getxPosition() + 50);
+        
+
 
 
     }
+
 
     public void redrawSprites() {
         if (this.holder.getSurface().isValid()) {
