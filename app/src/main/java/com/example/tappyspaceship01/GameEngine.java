@@ -13,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GameEngine extends SurfaceView implements Runnable {
@@ -45,21 +46,19 @@ public class GameEngine extends SurfaceView implements Runnable {
     Bitmap itemImage3;
     Bitmap itemImage4;
 
+    Bitmap ImageMoti;
+    int imageMotiXpos;
+    int imageMotiYpos;
+
 
     Player player;
     Bitmap PlayerImage;
-    int playerXpos;
-    int playerYpos;
-
     Bitmap lines;
 
-    ArrayList<Item> items = new ArrayList<Item>();
+
+    List<Item> items = new ArrayList<Item>();
     int lives = 10;
     int Score = 0;
-
-
-
-
 
 
     // -----------------------------------
@@ -88,6 +87,9 @@ public class GameEngine extends SurfaceView implements Runnable {
 
         this.printScreenInfo();
 
+        this.imageMotiXpos = 100;
+        this.imageMotiYpos = 100;
+
         // put the initial starting position of your player and item
         this.player = new Player(getContext(), 1500, 50);
         this.item1 = new Item(getContext(), 50, 50);
@@ -99,15 +101,13 @@ public class GameEngine extends SurfaceView implements Runnable {
         this.item4 = new Item(getContext(), 50, 650);
         this.items.add(item4);
 
+        this.ImageMoti = BitmapFactory.decodeResource(context.getResources(),R.drawable.poop64);
+
         this.PlayerImage = BitmapFactory.decodeResource(context.getResources(),R.drawable.dino64);
         this.itemImage1 = BitmapFactory.decodeResource(context.getResources(),R.drawable.candy64);
         this.itemImage2 = BitmapFactory.decodeResource(context.getResources(),R.drawable.poop64);
         this.itemImage3 = BitmapFactory.decodeResource(context.getResources(),R.drawable.rainbow64);
         this.itemImage4 = BitmapFactory.decodeResource(context.getResources(),R.drawable.candy64);
-
-
-
-//        this.item1
 
         this.lines = BitmapFactory.decodeResource(getResources(),R.drawable.alien_laser);
         this.lines = Bitmap.createScaledBitmap(
@@ -116,13 +116,7 @@ public class GameEngine extends SurfaceView implements Runnable {
                 50,
                 false);
 
-
-
-
     }
-
-
-
     private void printScreenInfo() {
 
         Log.d(TAG, "Screen (w, h) = " + this.screenWidth + "," + this.screenHeight);
@@ -166,32 +160,14 @@ public class GameEngine extends SurfaceView implements Runnable {
         gameThread.start();
     }
 
-    public void spawnBullet() {
-
-
-
-    }
-
-
-    private void spawnObjects() {
-        Random random = new Random();
-
-        if (this.items.size() < 4) {
-            Item myItem;
-            if (this.items.isEmpty()) {
-                myItem = new Item(getContext(), 100, 600);
-            } else {
-                // prev bullet
-                Item prevItem = this.items.get(this.items.size() - 1);
-                int newItemXpos = prevItem.getxPosition() + 120;
-                myItem = new Item(getContext(), newItemXpos, 600);
-            }
-            this.items.add(myItem);
-        }
-
-        //@TODO: Place the enemies in a random location
-
-    }
+//    private void spawnObjects(List<Item> items) {
+//        Random random = new Random();
+//
+//        return items.get(random.nextInt(items));
+//
+//        //@TODO: Place the enemies in a random location
+//
+//    }
 
     int numLoops = 0;
 
@@ -201,6 +177,12 @@ public class GameEngine extends SurfaceView implements Runnable {
     // ------------------------------
 
     public void updatePositions() {
+
+
+        this.imageMotiXpos = this.imageMotiXpos + 10;
+        this.imageMotiYpos = this.imageMotiYpos + 10;
+
+
 
 
         if (this.fingerAction == "inputUp") {
@@ -225,9 +207,9 @@ public class GameEngine extends SurfaceView implements Runnable {
 
 
         }
-        if (numLoops % 5  == 0) {
-            spawnObjects();
-        }
+//        if (numLoops % 5  == 0) {
+//            this.spawnObjects(items);
+//        }
 
         item1.setxPosition(item1.getxPosition() + 10);
         if(this.item1.getxPosition() >= screenWidth){
@@ -267,6 +249,10 @@ public class GameEngine extends SurfaceView implements Runnable {
             this.item2.updateHitbox();
             // decrease lives
             this.lives = this.lives - 1;
+//            if (this.lives <= -1){
+//                this.item2 = null;
+//            }
+
         }
         if (this.item3.getHitbox().intersect(this.player.getHitbox()) == true) {
             this.item3.setxPosition(50);
@@ -320,6 +306,15 @@ public class GameEngine extends SurfaceView implements Runnable {
                     paintbrush
             );
 
+            canvas.drawBitmap(ImageMoti,imageMotiXpos,imageMotiYpos,null);
+
+
+
+            canvas.drawLine(50,50,50,100,paintbrush);
+
+
+
+
 
             canvas.drawBitmap(this.PlayerImage,player.getxPosition(),player.getyPosition(),null);
             canvas.drawBitmap(this.itemImage1,item1.getxPosition(),item1.getyPosition(),null);
@@ -362,6 +357,7 @@ public class GameEngine extends SurfaceView implements Runnable {
         if (userAction == MotionEvent.ACTION_DOWN) {
 
             fingerAction = "inputUp";
+
         }
         else if (userAction == MotionEvent.ACTION_UP) {
 
